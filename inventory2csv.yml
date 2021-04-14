@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: False
+  vars:
+    linebreak: "\n"
+    output: '"hostname"{% for group in groups %},"{{ group }}"{% endfor %}{% for host in hostvars %}{{ linebreak }}"{{ host }}"{% for group in groups %},"{% if host in groups[group] %}1{% else %}0{% endif %}"{% endfor %}{% endfor %}'
+    file: "./output.csv"
+  tasks:
+  - name: "Output CSV"
+    copy:
+      content: "{{ output }}"
+      dest: "{{ file }}"
